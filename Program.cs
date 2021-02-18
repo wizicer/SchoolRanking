@@ -48,6 +48,7 @@
                 .ToDictionary(_ => _.Name, _ => _.Tags);
 
             var t = $"var colleges = {JsonConvert.SerializeObject(jsonColleges)};" ;
+            File.WriteAllText(@"..\..\..\colleges.js", t);
             var js = File.ReadAllText(@"..\..\..\inject.js");
             var s = js.Replace("{ /*colleges*/ }", JsonConvert.SerializeObject(jsonColleges));
         }

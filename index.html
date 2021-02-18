@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <input id="name" type="text" />
+    <button onclick="search()">search</button>
+    <br />
+    <textarea style="width: 100%;" id="result"></textarea>
+
+    <script src="colleges.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchParam = urlParams.get('s');
+        document.getElementById("name").value = searchParam;
+        search();
+
+        function search() {
+            let name = document.getElementById("name").value;
+            let col = colleges[name];
+            if (!col) col = ['🈚'];
+            value = JSON.stringify(col);
+            document.getElementById("result").value = value;
+
+            const params = new URLSearchParams(location.search);
+            params.set('s', name);
+            window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+        }
+
+        document.getElementById("name").addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                search();
+            }
+        });
+    </script>
+</body>
+</html>
