@@ -4,11 +4,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Ranking</title>
+    <title>学校排名</title>
 </head>
 <body>
-    <input id="name" type="text" />
-    <button onclick="search()">search</button>
+    <form method="get" onsubmit="event.preventDefault();">
+        <label>学校名称:</label>
+        <input id="name" type="text" name="s" />
+        <button type="submit" onclick="search()">搜索</button>
+    </form>
     <br />
     <textarea style="width: 100%;" id="result"></textarea>
 
