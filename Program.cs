@@ -13,6 +13,7 @@
     {
         static void Main(string[] args)
         {
+            var us = GetRecords<UniversityCsv>(@"..\..\..\university.csv");
             var cs = GetRecords<CollegeCsv>(@"..\..\..\college.csv");
             var rs = GetRecords<Ranking>(@"..\..\..\ranking.csv");
             var colleges = cs.Select(_ => _.Name)
@@ -44,10 +45,12 @@
                     _.Index == -1 ? null : $"IDX{_.Index}",
                     _.Location
                     ))
+                .Concat(us.Select(_ => new CollegeJson(_.Institution, $"WLD{_.WorldRank}", $"{_.Location}{_.NationalRank}")))
                 .Select(_ => _ with { Tags = _.Tags.Where(t => t != null).ToArray() })
-                .ToDictionary(_ => _.Name, _ => _.Tags);
+                .ToArray();
+                //.ToDictionary(_ => _.Name, _ => _.Tags);
 
-            var t = $"var colleges = {JsonConvert.SerializeObject(jsonColleges)};" ;
+            var t = $"var colleges = {JsonConvert.SerializeObject(jsonColleges, Formatting.Indented)};";
             File.WriteAllText(@"..\..\..\colleges.js", t);
             var js = File.ReadAllText(@"..\..\..\inject.js");
             var s = js.Replace("{ /*colleges*/ }", JsonConvert.SerializeObject(jsonColleges));
@@ -112,5 +115,16 @@
         [Name("总得分")] string Points
     );
 
-
+    [DebuggerDisplay("{Name}")]
+    public record UniversityCsv(
+        [Name("WorldRank")] string WorldRank,
+        [Name("Institution")] string Institution,
+        [Name("Location")] string Location,
+        [Name("NationalRank")] string NationalRank,
+        [Name("QualityOfEducation")] string QualityOfEducation,
+        [Name("AlumniEmployment")] string AlumniEmployment,
+        [Name("QualityOfFaculty")] string QualityOfFaculty,
+        [Name("ResearchPerformance")] string ResearchPerformance,
+        [Name("Score")] string Score
+    );
 }

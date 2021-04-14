@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
 
 <html lang="zh" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学校排名</title>
 </head>
+
 <body>
     <form method="get" onsubmit="event.preventDefault();">
         <label>学校名称:</label>
@@ -24,8 +26,17 @@
 
         function search() {
             let name = document.getElementById("name").value;
-            let col = colleges[name];
-            if (!col) col = ['🈚'];
+            let col = [];
+            let count = 0;
+            for (let i = 0; i < colleges.length; i++) {
+                if (count > 6) break;
+                const c = colleges[i];
+                if (c.Name.toLowerCase().startsWith(name.toLowerCase())) {
+                    col.push(c);
+                    count++;
+                }
+            }
+            if (col.length == 0) col = ['🈚'];
             value = JSON.stringify(col);
             document.getElementById("result").value = value;
 
@@ -42,4 +53,5 @@
         });
     </script>
 </body>
+
 </html>
